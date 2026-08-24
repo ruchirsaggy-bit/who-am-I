@@ -1,0 +1,27 @@
+/* A small, local knowledge base that keeps the prototype deterministic and offline-friendly. */
+window.PERSONAS = [
+  { name: 'Albert Einstein', category: 'Science', born: 1879, alive: false, woman: false, artist: false, scientist: true },
+  { name: 'Marie Curie', category: 'Science', born: 1867, alive: false, woman: true, artist: false, scientist: true },
+  { name: 'Ada Lovelace', category: 'Science', born: 1815, alive: false, woman: true, artist: false, scientist: true },
+  { name: 'Alan Turing', category: 'Science', born: 1912, alive: false, woman: false, artist: false, scientist: true },
+  { name: 'Katherine Johnson', category: 'Science', born: 1918, alive: false, woman: true, artist: false, scientist: true },
+  { name: 'Stephen Hawking', category: 'Science', born: 1942, alive: false, woman: false, artist: false, scientist: true },
+  { name: 'Cleopatra', category: 'History', born: -69, alive: false, woman: true, artist: false, scientist: false },
+  { name: 'Nelson Mandela', category: 'History', born: 1918, alive: false, woman: false, artist: false, scientist: false },
+  { name: 'Joan of Arc', category: 'History', born: 1412, alive: false, woman: true, artist: false, scientist: false },
+  { name: 'Mahatma Gandhi', category: 'History', born: 1869, alive: false, woman: false, artist: false, scientist: false },
+  { name: 'Rosa Parks', category: 'History', born: 1913, alive: false, woman: true, artist: false, scientist: false },
+  { name: 'Winston Churchill', category: 'History', born: 1874, alive: false, woman: false, artist: false, scientist: false },
+  { name: 'Frida Kahlo', category: 'Arts', born: 1907, alive: false, woman: true, artist: true, scientist: false },
+  { name: 'Leonardo da Vinci', category: 'Arts', born: 1452, alive: false, woman: false, artist: true, scientist: false },
+  { name: 'Maya Angelou', category: 'Arts', born: 1928, alive: false, woman: true, artist: true, scientist: false },
+  { name: 'Pablo Picasso', category: 'Arts', born: 1881, alive: false, woman: false, artist: true, scientist: false },
+  { name: 'William Shakespeare', category: 'Arts', born: 1564, alive: false, woman: false, artist: true, scientist: false },
+  { name: 'Beyonce Knowles', category: 'Arts', born: 1981, alive: true, woman: true, artist: true, scientist: false },
+  { name: 'Serena Williams', category: 'Icons', born: 1981, alive: true, woman: true, artist: false, scientist: false },
+  { name: 'Muhammad Ali', category: 'Icons', born: 1942, alive: false, woman: false, artist: false, scientist: false },
+  { name: 'Amelia Earhart', category: 'Icons', born: 1897, alive: false, woman: true, artist: false, scientist: false },
+  { name: 'Martin Luther King Jr.', category: 'Icons', born: 1929, alive: false, woman: false, artist: false, scientist: false },
+  { name: 'Malala Yousafzai', category: 'Icons', born: 1997, alive: true, woman: true, artist: false, scientist: false },
+  { name: 'Usain Bolt', category: 'Icons', born: 1986, alive: true, woman: false, artist: false, scientist: false }
+];
