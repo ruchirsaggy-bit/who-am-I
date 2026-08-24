@@ -17,6 +17,7 @@ codex/create-who-am-i-gaming-application-27lg1j
 
 The local knowledge base currently includes **24 personas** across icons, history, science, and the arts. The records live in `personas.js`, so more people and answer attributes can be added without changing the interface.
 
+AI Challenger mode supports browser-native voice input and spoken answers through the Web Speech API. The interface explains microphone permission states, lets players stop or retry listening, and reads every generated answer aloud. Voice availability depends on browser support, a secure context (`https://` or localhost), and microphone permission; the labeled text field and **Ask** button always remain available as a fallback.
 AI Challenger mode supports browser-native voice input and spoken answers through the Web Speech API. Voice availability depends on browser support and microphone permission; typed questions remain available as a fallback.
 
 main

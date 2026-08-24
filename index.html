@@ -114,6 +114,12 @@
         <aside class="mystery-card"><span class="kicker">Your mystery persona</span><div class="mystery-face">?</div><p>Ask questions with a<br /><strong>YES</strong> or <strong>NO</strong> answer.</p></aside>
         <div class="question-panel">
           <div class="turn-label"><i></i> Your turn</div><h2>What would you like to know?</h2>
+          <form class="question-form"><label for="question">Ask by voice or type your question</label><div><input id="question" autocomplete="off" placeholder="Were they born before 1900?" required /><button class="voice-button" type="button" aria-label="Start voice question" aria-pressed="false" data-state="idle" title="Ask with your voice"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15a4 4 0 0 0 4-4V6a4 4 0 0 0-8 0v5a4 4 0 0 0 4 4Zm-7-4a7 7 0 0 0 14 0M12 18v4m-4 0h8"/></svg></button><button type="submit">Ask <span>↑</span></button></div></form>
+          <div class="voice-feedback">
+            <p class="voice-status" role="status" aria-live="polite">Voice mode is ready. Tap the microphone to speak.</p>
+            <button class="retry-permission" type="button" hidden>Try microphone again</button>
+          </div>
+          <p class="text-fallback">Prefer not to use your microphone? Type above and press <strong>Ask</strong>.</p>
           <form class="question-form"><label for="question">Ask a question</label><div><input id="question" autocomplete="off" placeholder="Were they born before 1900?" required /><button class="voice-button" type="button" aria-label="Ask with your voice" aria-pressed="false" title="Ask with your voice"><span aria-hidden="true">●</span></button><button type="submit">Ask <span>↑</span></button></div></form>
           <p class="voice-status" role="status">Voice mode is ready. Tap the microphone to speak.</p>
           <form class="question-form"><label for="question">Ask a question</label><div><input id="question" autocomplete="off" placeholder="Were they born before 1900?" required /><button type="submit">Ask <span>↑</span></button></div></form>
