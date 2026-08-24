@@ -17,6 +17,8 @@ let microphonePermission = 'prompt';
 document.querySelector('#persona-count').textContent = personas.length;
 
 function openSetupDialog() {
+  dialog.classList.add('is-open');
+  dialog.setAttribute('aria-hidden', 'false');
   // Older embedded browsers do not implement HTMLDialogElement.showModal().
   // Keeping an explicit fallback makes the mode cards usable in those clients.
   if (typeof dialog.showModal === 'function') {
@@ -29,6 +31,8 @@ function openSetupDialog() {
 }
 
 function closeSetupDialog() {
+  dialog.classList.remove('is-open');
+  dialog.setAttribute('aria-hidden', 'true');
   if (typeof dialog.close === 'function' && dialog.open) dialog.close();
   else dialog.removeAttribute('open');
   dialog.classList.remove('dialog-fallback');
@@ -48,6 +52,7 @@ dialog.addEventListener('click', (event) => {
   if (event.target === dialog) closeSetupDialog();
 });
 document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && dialog.classList.contains('is-open')) closeSetupDialog();
   if (event.key === 'Escape' && dialog.hasAttribute('open')) closeSetupDialog();
 const personas = window.PERSONAS || [];
 let activeMode = 'AI Challenger';
@@ -133,6 +138,7 @@ function setVoiceStatus(state, message) {
 }
 
 async function inspectMicrophonePermission() {
+  if (!navigator.permissions || !navigator.permissions.query) {
   if (!navigator.permissions?.query) {
     setVoiceStatus('idle', 'Tap the microphone to allow access and ask a question.');
     return;
@@ -164,6 +170,7 @@ async function requestMicrophoneAndListen() {
   setVoiceStatus('requesting', 'Requesting microphone access…');
   voiceButton.disabled = true;
   try {
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia && microphonePermission !== 'granted') {
     if (navigator.mediaDevices?.getUserMedia && microphonePermission !== 'granted') {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       stream.getTracks().forEach((track) => track.stop());
@@ -173,6 +180,7 @@ async function requestMicrophoneAndListen() {
     recognition.start();
   } catch (error) {
     voiceButton.disabled = false;
+    const denied = error && (error.name === 'NotAllowedError' || error.name === 'SecurityError');
     const denied = error?.name === 'NotAllowedError' || error?.name === 'SecurityError';
     setVoiceStatus(denied ? 'denied' : 'error', denied
       ? 'Microphone access was denied. Change your browser permission or type your question.'
