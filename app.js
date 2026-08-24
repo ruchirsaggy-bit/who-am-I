@@ -13,6 +13,42 @@ let activePersona = personas[0];
 let recognition;
 let isListening = false;
 let microphonePermission = 'prompt';
+
+document.querySelector('#persona-count').textContent = personas.length;
+
+function openSetupDialog() {
+  // Older embedded browsers do not implement HTMLDialogElement.showModal().
+  // Keeping an explicit fallback makes the mode cards usable in those clients.
+  if (typeof dialog.showModal === 'function') {
+    if (!dialog.open) dialog.showModal();
+    return;
+  }
+  dialog.setAttribute('open', '');
+  dialog.classList.add('dialog-fallback');
+  document.body.classList.add('dialog-open');
+}
+
+function closeSetupDialog() {
+  if (typeof dialog.close === 'function' && dialog.open) dialog.close();
+  else dialog.removeAttribute('open');
+  dialog.classList.remove('dialog-fallback');
+  document.body.classList.remove('dialog-open');
+}
+
+document.querySelectorAll('.mode-card').forEach((card) => {
+  card.querySelector('.play-button').addEventListener('click', () => {
+    activeMode = card.dataset.mode;
+    document.querySelector('#dialog-title').textContent = card.dataset.mode;
+    openSetupDialog();
+  });
+});
+
+document.querySelector('.close-dialog').addEventListener('click', closeSetupDialog);
+dialog.addEventListener('click', (event) => {
+  if (event.target === dialog) closeSetupDialog();
+});
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && dialog.hasAttribute('open')) closeSetupDialog();
 const personas = window.PERSONAS || [];
 let activeMode = 'AI Challenger';
 let activePersona = personas[0];
@@ -39,6 +75,7 @@ document.querySelector('.start-button').addEventListener('click', () => {
   const category = document.querySelector('input[name="category"]:checked').value;
   const choices = category === 'Icons' ? personas : personas.filter((persona) => persona.category === category);
   activePersona = choices[Math.floor(Math.random() * choices.length)] || personas[0];
+  closeSetupDialog();
   dialog.close();
   page.forEach((element) => { element.hidden = true; });
   game.hidden = false;

@@ -11,6 +11,8 @@ python3 -m http.server 4173
 Then visit `http://localhost:4173`.
 
 The prototype uses plain HTML, CSS, and JavaScript and has no build dependencies.
+
+The setup screen uses the native HTML dialog where available and includes a compatibility fallback for older or embedded browsers.
 codex/create-who-am-i-gaming-application-27lg1j
 
 ## Personas and voice mode
