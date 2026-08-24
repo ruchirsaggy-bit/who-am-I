@@ -11,9 +11,12 @@ python3 -m http.server 4173
 Then visit `http://localhost:4173`.
 
 The prototype uses plain HTML, CSS, and JavaScript and has no build dependencies.
+codex/create-who-am-i-gaming-application-27lg1j
 
 ## Personas and voice mode
 
 The local knowledge base currently includes **24 personas** across icons, history, science, and the arts. The records live in `personas.js`, so more people and answer attributes can be added without changing the interface.
 
 AI Challenger mode supports browser-native voice input and spoken answers through the Web Speech API. Voice availability depends on browser support and microphone permission; typed questions remain available as a fallback.
+
+main

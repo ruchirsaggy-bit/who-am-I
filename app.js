@@ -15,6 +15,9 @@ document.querySelector('#persona-count').textContent = personas.length;
 document.querySelectorAll('.mode-card').forEach((card) => {
   card.querySelector('.play-button').addEventListener('click', () => {
     activeMode = card.dataset.mode;
+
+document.querySelectorAll('.mode-card').forEach((card) => {
+  card.querySelector('.play-button').addEventListener('click', () => {
     document.querySelector('#dialog-title').textContent = card.dataset.mode;
     dialog.showModal();
   });
@@ -94,6 +97,15 @@ if (Recognition) {
   voiceButton.addEventListener('click', () => recognition.start());
 }
 
+  const isNegative = /alive|woman|artist/i.test(questionInput.value);
+  answer.querySelector('.answer-word').textContent = isNegative ? 'NO' : 'YES';
+  answer.querySelector('.answer-text').textContent = isNegative
+    ? 'That does not describe this mystery person.'
+    : 'You are on the right track. Keep narrowing it down.';
+  answer.hidden = false;
+  questionInput.value = '';
+});
+
 document.querySelectorAll('.suggestions button').forEach((button) => {
   button.addEventListener('click', () => {
     questionInput.value = button.textContent;
@@ -103,6 +115,7 @@ document.querySelectorAll('.suggestions button').forEach((button) => {
 
 document.querySelector('.guess-button').addEventListener('click', () => {
   questionInput.value = 'Is it ';
+  questionInput.value = 'Is it Albert Einstein?';
   questionInput.focus();
 });
 
