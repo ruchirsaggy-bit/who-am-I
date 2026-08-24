@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f5f1e8" />
+    <title>Persona — The guessing game</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+    <header class="site-header">
+      <a class="brand" href="#" aria-label="Persona home">
+        <span class="brand-mark">P</span><span>PERSONA</span>
+      </a>
+      <nav aria-label="Main navigation">
+        <button class="nav-link active" type="button">Play</button>
+        <button class="nav-link" type="button">How to play</button>
+      </nav>
+      <button class="sound-button" type="button" aria-label="Toggle sound" aria-pressed="true">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Zm5 3.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12"/></svg>
+      </button>
+    </header>
+
+    <main>
+      <section class="hero" id="play">
+        <div class="eyebrow"><span></span> The classic guessing game, reimagined</div>
+        <h1>WHO<br />AM <em>I?</em></h1>
+        <p>Think. Ask. Discover. Race to uncover the remarkable person hiding behind every answer.</p>
+        <div class="scroll-cue" aria-hidden="true"><span>Choose your game</span><i>↓</i></div>
+      </section>
+
+      <section class="modes" aria-labelledby="mode-title">
+        <div class="section-heading">
+          <p class="section-number">01</p>
+          <div><p class="kicker">Start a new round</p><h2 id="mode-title">How will you play?</h2></div>
+        </div>
+
+        <div class="mode-grid">
+          <article class="mode-card featured" data-mode="AI Challenger">
+            <div class="card-top"><span class="mode-number">01</span><span class="pill">Most popular</span></div>
+            <div class="portrait portrait-ai" aria-hidden="true">
+              <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+              <div class="face">?</div>
+            </div>
+            <div class="card-copy">
+              <h3>Challenge the AI</h3>
+              <p>Ask clever questions. Our AI knows the answer—and it won't make it easy.</p>
+              <button class="play-button" type="button"><span>Play solo</span><b>↗</b></button>
+            </div>
+          </article>
+
+          <article class="mode-card coral" data-mode="Pass & Play">
+            <div class="card-top"><span class="mode-number">02</span><span class="player-count">2–8 players</span></div>
+            <div class="portrait portrait-friends" aria-hidden="true">
+              <span class="avatar avatar-one">A</span><span class="avatar avatar-two">?</span><span class="avatar avatar-three">M</span>
+            </div>
+            <div class="card-copy">
+              <h3>Pass &amp; play</h3>
+              <p>One device, all your friends. Pass it around and let the questions fly.</p>
+              <button class="play-button" type="button"><span>Play together</span><b>↗</b></button>
+            </div>
+          </article>
+
+          <article class="mode-card dark" data-mode="Online Room">
+            <div class="card-top"><span class="mode-number">03</span><span class="live"><i></i> Online</span></div>
+            <div class="portrait portrait-world" aria-hidden="true">
+              <div class="globe"><span>?</span></div><i class="dot d1"></i><i class="dot d2"></i><i class="dot d3"></i>
+            </div>
+            <div class="card-copy">
+              <h3>Play online</h3>
+              <p>Create a room and invite friends to join from anywhere in the world.</p>
+              <button class="play-button" type="button"><span>Create a room</span><b>↗</b></button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="how-to" id="how-to">
+        <div class="section-heading"><p class="section-number">02</p><div><p class="kicker">Three simple steps</p><h2>Question everything.</h2></div></div>
+        <ol class="steps">
+          <li><strong>01</strong><h3>Get a persona</h3><p>A famous figure from history, culture, science, or sport is chosen.</p></li>
+          <li><strong>02</strong><h3>Ask yes or no</h3><p>Narrow it down with sharp questions before your opponents do.</p></li>
+          <li><strong>03</strong><h3>Make your guess</h3><p>Name your persona first to win the round and earn the point.</p></li>
+        </ol>
+      </section>
+    </main>
+
+    <div class="setup-overlay" hidden>
+    <section id="game-setup" class="setup-dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title">
+      <button class="close-dialog" type="button" aria-label="Close">×</button>
+      <p class="kicker">New game</p>
+      <h2 id="dialog-title">Challenge the AI</h2>
+      <p class="dialog-intro">Pick a world to explore. Your mystery persona is waiting.</p>
+      <p class="persona-count"><strong id="persona-count">24</strong> personas available across four categories</p>
+      <fieldset>
+        <legend>Choose a category</legend>
+        <div class="category-grid">
+          <label><input type="radio" name="category" value="Icons" checked /><span>✦</span><b>All icons</b></label>
+          <label><input type="radio" name="category" value="History" /><span>⌛</span><b>History</b></label>
+          <label><input type="radio" name="category" value="Science" /><span>⌁</span><b>Science</b></label>
+          <label><input type="radio" name="category" value="Arts" /><span>◒</span><b>Arts</b></label>
+        </div>
+      </fieldset>
+      <button class="start-button" type="button">Start the game <span>→</span></button>
+      <p class="microcopy">No sign-up needed · Takes about 5 minutes</p>
+    </section>
+    </div>
+
+    <section class="game-screen" aria-live="polite" hidden>
+      <header class="game-header"><a class="brand" href="#"><span class="brand-mark">P</span><span>PERSONA</span></a><div class="round-label">ROUND <b>1</b> OF 5</div><button class="exit-game" type="button">Exit game</button></header>
+      <div class="game-layout">
+        <aside class="mystery-card"><span class="kicker">Your mystery persona</span><div class="mystery-face">?</div><p>Ask questions with a<br /><strong>YES</strong> or <strong>NO</strong> answer.</p></aside>
+        <div class="question-panel">
+          <div class="turn-label"><i></i> Your turn</div><h2>What would you like to know?</h2>
+          <form class="question-form"><label for="question">Ask by voice or type your question</label><div><input id="question" autocomplete="off" placeholder="Were they born before 1900?" required /><button class="voice-button" type="button" aria-label="Start voice question" aria-pressed="false" data-state="idle" title="Ask with your voice"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15a4 4 0 0 0 4-4V6a4 4 0 0 0-8 0v5a4 4 0 0 0 4 4Zm-7-4a7 7 0 0 0 14 0M12 18v4m-4 0h8"/></svg></button><button type="submit">Ask <span>↑</span></button></div></form>
+          <div class="voice-feedback">
+            <p class="voice-status" role="status" aria-live="polite">Voice mode is ready. Tap the microphone to speak.</p>
+            <button class="retry-permission" type="button" hidden>Try microphone again</button>
+          </div>
+          <p class="text-fallback">Prefer not to use your microphone? Type above and press <strong>Ask</strong>.</p>
+          <div class="answer" hidden><span class="answer-word">YES</span><p class="answer-text">This person was born before 1900.</p></div>
+          <div class="suggestions"><p>Try asking</p><button type="button">Are they a scientist?</button><button type="button">Are they still alive?</button><button type="button">Were they an artist?</button></div>
+          <button class="guess-button" type="button">I think I know who it is <span>→</span></button>
+        </div>
+      </div>
+    </section>
+
+    <script src="personas.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
