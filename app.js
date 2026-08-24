@@ -49,6 +49,26 @@ dialog.addEventListener('click', (event) => {
 });
 document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape' && dialog.hasAttribute('open')) closeSetupDialog();
+const personas = window.PERSONAS || [];
+let activeMode = 'AI Challenger';
+let activePersona = personas[0];
+
+document.querySelector('#persona-count').textContent = personas.length;
+
+document.querySelectorAll('.mode-card').forEach((card) => {
+  card.querySelector('.play-button').addEventListener('click', () => {
+    activeMode = card.dataset.mode;
+
+document.querySelectorAll('.mode-card').forEach((card) => {
+  card.querySelector('.play-button').addEventListener('click', () => {
+    document.querySelector('#dialog-title').textContent = card.dataset.mode;
+    dialog.showModal();
+  });
+});
+
+document.querySelector('.close-dialog').addEventListener('click', () => dialog.close());
+dialog.addEventListener('click', (event) => {
+  if (event.target === dialog) dialog.close();
 });
 
 document.querySelector('.start-button').addEventListener('click', () => {
@@ -56,6 +76,7 @@ document.querySelector('.start-button').addEventListener('click', () => {
   const choices = category === 'Icons' ? personas : personas.filter((persona) => persona.category === category);
   activePersona = choices[Math.floor(Math.random() * choices.length)] || personas[0];
   closeSetupDialog();
+  dialog.close();
   page.forEach((element) => { element.hidden = true; });
   game.hidden = false;
   questionInput.focus();
@@ -67,6 +88,7 @@ document.querySelector('.start-button').addEventListener('click', () => {
     setVoiceStatus('unsupported', 'Voice input is not supported by this browser. Type your question above instead.');
   } else {
     inspectMicrophonePermission();
+    voiceStatus.textContent = 'Voice input is not supported by this browser. You can still type questions.';
   }
 });
 
@@ -84,6 +106,10 @@ questionForm.addEventListener('submit', (event) => {
   answer.hidden = false;
   questionInput.value = '';
   if (activeMode === 'AI Challenger') speakAnswer(response);
+  if (activeMode === 'AI Challenger' && 'speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(new SpeechSynthesisUtterance(`${response.yes ? 'Yes' : 'No'}. ${response.detail}`));
+  }
 });
 
 function answerQuestion(question, persona) {
@@ -204,6 +230,34 @@ if (Recognition) {
   retryPermissionButton.addEventListener('click', requestMicrophoneAndListen);
 }
 
+const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+if (Recognition) {
+  const recognition = new Recognition();
+  recognition.lang = 'en-US';
+  recognition.interimResults = false;
+  recognition.addEventListener('start', () => {
+    voiceButton.setAttribute('aria-pressed', 'true');
+    voiceStatus.textContent = 'Listening… ask a yes-or-no question.';
+  });
+  recognition.addEventListener('result', (event) => {
+    questionInput.value = event.results[0][0].transcript;
+    voiceStatus.textContent = `Heard: “${questionInput.value}”`;
+    questionForm.requestSubmit();
+  });
+  recognition.addEventListener('end', () => voiceButton.setAttribute('aria-pressed', 'false'));
+  recognition.addEventListener('error', () => { voiceStatus.textContent = 'I could not hear that. Please try again or type your question.'; });
+  voiceButton.addEventListener('click', () => recognition.start());
+}
+
+  const isNegative = /alive|woman|artist/i.test(questionInput.value);
+  answer.querySelector('.answer-word').textContent = isNegative ? 'NO' : 'YES';
+  answer.querySelector('.answer-text').textContent = isNegative
+    ? 'That does not describe this mystery person.'
+    : 'You are on the right track. Keep narrowing it down.';
+  answer.hidden = false;
+  questionInput.value = '';
+});
+
 document.querySelectorAll('.suggestions button').forEach((button) => {
   button.addEventListener('click', () => {
     questionInput.value = button.textContent;
@@ -213,6 +267,7 @@ document.querySelectorAll('.suggestions button').forEach((button) => {
 
 document.querySelector('.guess-button').addEventListener('click', () => {
   questionInput.value = 'Is it ';
+  questionInput.value = 'Is it Albert Einstein?';
   questionInput.focus();
 });
 
