@@ -31,12 +31,15 @@ card.button = element();
 
 const selectors = new Map();
 for (const selector of [
+  '.setup-dialog', '.setup-overlay', '.game-screen', '.question-form', '#question', '.answer',
   '.setup-dialog', '.game-screen', '.question-form', '#question', '.answer',
   '.voice-button', '.voice-status', '.retry-permission', '#persona-count',
   '#dialog-title', '.close-dialog', '.start-button', '.exit-game',
   '.guess-button', '.sound-button'
 ]) selectors.set(selector, element());
 selectors.set('.setup-dialog', dialog);
+const overlay = selectors.get('.setup-overlay');
+overlay.hidden = true;
 
 const document = {
   body: element(),
@@ -52,6 +55,9 @@ const window = { PERSONAS: [{ name: 'Test Persona', category: 'Icons' }] };
 vm.runInNewContext(fs.readFileSync('app.js', 'utf8'), { document, window, navigator: {} });
 
 card.button.dispatch('click');
+assert.equal(overlay.hidden, false, 'Play solo should reveal the setup overlay');
+assert.equal(selectors.get('#dialog-title').textContent, 'AI Challenger');
+console.log('Play solo opens the single setup overlay');
 assert.equal(dialog.classList.contains('is-open'), true, 'Play solo should open the setup dialog');
 assert.equal(dialog.open, true, 'Play solo should open the setup dialog without showModal support');
 assert.equal(selectors.get('#dialog-title').textContent, 'AI Challenger');

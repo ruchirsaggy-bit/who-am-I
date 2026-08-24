@@ -1,4 +1,7 @@
 const dialog = document.querySelector('.setup-dialog');
+const setupOverlay = document.querySelector('.setup-overlay');
+const game = document.querySelector('.game-screen');
+const page = document.querySelectorAll('body > .site-header, body > main');
 const game = document.querySelector('.game-screen');
 const page = document.querySelectorAll('body > :not(.game-screen):not(.grain)');
 const questionForm = document.querySelector('.question-form');
@@ -17,6 +20,13 @@ let microphonePermission = 'prompt';
 document.querySelector('#persona-count').textContent = personas.length;
 
 function openSetupDialog() {
+  setupOverlay.hidden = false;
+  document.body.classList.add('dialog-open');
+  document.querySelector('.close-dialog').focus();
+}
+
+function closeSetupDialog() {
+  setupOverlay.hidden = true;
   dialog.classList.add('is-open');
   dialog.setAttribute('aria-hidden', 'false');
   // Older embedded browsers do not implement HTMLDialogElement.showModal().
@@ -48,6 +58,11 @@ document.querySelectorAll('.mode-card').forEach((card) => {
 });
 
 document.querySelector('.close-dialog').addEventListener('click', closeSetupDialog);
+setupOverlay.addEventListener('click', (event) => {
+  if (event.target === setupOverlay) closeSetupDialog();
+});
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && !setupOverlay.hidden) closeSetupDialog();
 dialog.addEventListener('click', (event) => {
   if (event.target === dialog) closeSetupDialog();
 });

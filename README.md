@@ -12,6 +12,7 @@ Then visit `http://localhost:4173`.
 
 The prototype uses plain HTML, CSS, and JavaScript and has no build dependencies.
 
+The setup screen uses a single explicit overlay controlled by the game buttons, avoiding browser-specific dialog behavior.
 The setup screen is a progressively enhanced modal. Its links work through a CSS target fallback even if JavaScript fails to initialize, while JavaScript adds game behavior when available.
 The setup screen uses the native HTML dialog where available and includes a compatibility fallback for older or embedded browsers.
 codex/create-who-am-i-gaming-application-27lg1j
