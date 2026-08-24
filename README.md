@@ -13,9 +13,14 @@ Then visit `http://localhost:4173`.
 The prototype uses plain HTML, CSS, and JavaScript and has no build dependencies.
 
 The setup screen is a progressively enhanced modal. Its links work through a CSS target fallback even if JavaScript fails to initialize, while JavaScript adds game behavior when available.
+The setup screen uses the native HTML dialog where available and includes a compatibility fallback for older or embedded browsers.
+codex/create-who-am-i-gaming-application-27lg1j
 
 ## Personas and voice mode
 
 The local knowledge base currently includes **24 personas** across icons, history, science, and the arts. The records live in `personas.js`, so more people and answer attributes can be added without changing the interface.
 
 AI Challenger mode supports browser-native voice input and spoken answers through the Web Speech API. The interface explains microphone permission states, lets players stop or retry listening, and reads every generated answer aloud. Voice availability depends on browser support, a secure context (`https://` or localhost), and microphone permission; the labeled text field and **Ask** button always remain available as a fallback.
+AI Challenger mode supports browser-native voice input and spoken answers through the Web Speech API. Voice availability depends on browser support and microphone permission; typed questions remain available as a fallback.
+
+main

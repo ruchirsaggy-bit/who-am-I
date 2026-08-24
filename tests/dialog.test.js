@@ -12,6 +12,7 @@ function element() {
     style: {},
     textContent: '',
     classList: { values: new Set(), add(value) { this.values.add(value); }, remove(value) { this.values.delete(value); }, contains(value) { return this.values.has(value); } },
+    classList: { add() {}, remove() {} },
     addEventListener(type, callback) { listeners[type] = callback; },
     dispatch(type, event = {}) { listeners[type]?.({ target: this, currentTarget: this, preventDefault() {}, ...event }); },
     setAttribute(name, value) { attributes.set(name, value); if (name === 'open') this.open = true; },
@@ -23,6 +24,7 @@ function element() {
 }
 
 const dialog = element();
+const dialog = element(); // Deliberately has no showModal(), matching an older webview.
 const card = element();
 card.dataset.mode = 'AI Challenger';
 card.button = element();
@@ -51,5 +53,6 @@ vm.runInNewContext(fs.readFileSync('app.js', 'utf8'), { document, window, naviga
 
 card.button.dispatch('click');
 assert.equal(dialog.classList.contains('is-open'), true, 'Play solo should open the setup dialog');
+assert.equal(dialog.open, true, 'Play solo should open the setup dialog without showModal support');
 assert.equal(selectors.get('#dialog-title').textContent, 'AI Challenger');
 console.log('Play solo dialog fallback passed');

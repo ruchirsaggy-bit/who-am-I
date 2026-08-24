@@ -19,12 +19,23 @@ document.querySelector('#persona-count').textContent = personas.length;
 function openSetupDialog() {
   dialog.classList.add('is-open');
   dialog.setAttribute('aria-hidden', 'false');
+  // Older embedded browsers do not implement HTMLDialogElement.showModal().
+  // Keeping an explicit fallback makes the mode cards usable in those clients.
+  if (typeof dialog.showModal === 'function') {
+    if (!dialog.open) dialog.showModal();
+    return;
+  }
+  dialog.setAttribute('open', '');
+  dialog.classList.add('dialog-fallback');
   document.body.classList.add('dialog-open');
 }
 
 function closeSetupDialog() {
   dialog.classList.remove('is-open');
   dialog.setAttribute('aria-hidden', 'true');
+  if (typeof dialog.close === 'function' && dialog.open) dialog.close();
+  else dialog.removeAttribute('open');
+  dialog.classList.remove('dialog-fallback');
   document.body.classList.remove('dialog-open');
 }
 
@@ -42,6 +53,27 @@ dialog.addEventListener('click', (event) => {
 });
 document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape' && dialog.classList.contains('is-open')) closeSetupDialog();
+  if (event.key === 'Escape' && dialog.hasAttribute('open')) closeSetupDialog();
+const personas = window.PERSONAS || [];
+let activeMode = 'AI Challenger';
+let activePersona = personas[0];
+
+document.querySelector('#persona-count').textContent = personas.length;
+
+document.querySelectorAll('.mode-card').forEach((card) => {
+  card.querySelector('.play-button').addEventListener('click', () => {
+    activeMode = card.dataset.mode;
+
+document.querySelectorAll('.mode-card').forEach((card) => {
+  card.querySelector('.play-button').addEventListener('click', () => {
+    document.querySelector('#dialog-title').textContent = card.dataset.mode;
+    dialog.showModal();
+  });
+});
+
+document.querySelector('.close-dialog').addEventListener('click', () => dialog.close());
+dialog.addEventListener('click', (event) => {
+  if (event.target === dialog) dialog.close();
 });
 
 document.querySelector('.start-button').addEventListener('click', () => {
@@ -49,6 +81,7 @@ document.querySelector('.start-button').addEventListener('click', () => {
   const choices = category === 'Icons' ? personas : personas.filter((persona) => persona.category === category);
   activePersona = choices[Math.floor(Math.random() * choices.length)] || personas[0];
   closeSetupDialog();
+  dialog.close();
   page.forEach((element) => { element.hidden = true; });
   game.hidden = false;
   questionInput.focus();
@@ -60,6 +93,7 @@ document.querySelector('.start-button').addEventListener('click', () => {
     setVoiceStatus('unsupported', 'Voice input is not supported by this browser. Type your question above instead.');
   } else {
     inspectMicrophonePermission();
+    voiceStatus.textContent = 'Voice input is not supported by this browser. You can still type questions.';
   }
 });
 
@@ -77,6 +111,10 @@ questionForm.addEventListener('submit', (event) => {
   answer.hidden = false;
   questionInput.value = '';
   if (activeMode === 'AI Challenger') speakAnswer(response);
+  if (activeMode === 'AI Challenger' && 'speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(new SpeechSynthesisUtterance(`${response.yes ? 'Yes' : 'No'}. ${response.detail}`));
+  }
 });
 
 function answerQuestion(question, persona) {
@@ -101,6 +139,7 @@ function setVoiceStatus(state, message) {
 
 async function inspectMicrophonePermission() {
   if (!navigator.permissions || !navigator.permissions.query) {
+  if (!navigator.permissions?.query) {
     setVoiceStatus('idle', 'Tap the microphone to allow access and ask a question.');
     return;
   }
@@ -132,6 +171,7 @@ async function requestMicrophoneAndListen() {
   voiceButton.disabled = true;
   try {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia && microphonePermission !== 'granted') {
+    if (navigator.mediaDevices?.getUserMedia && microphonePermission !== 'granted') {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       stream.getTracks().forEach((track) => track.stop());
       microphonePermission = 'granted';
@@ -141,6 +181,7 @@ async function requestMicrophoneAndListen() {
   } catch (error) {
     voiceButton.disabled = false;
     const denied = error && (error.name === 'NotAllowedError' || error.name === 'SecurityError');
+    const denied = error?.name === 'NotAllowedError' || error?.name === 'SecurityError';
     setVoiceStatus(denied ? 'denied' : 'error', denied
       ? 'Microphone access was denied. Change your browser permission or type your question.'
       : 'The microphone is unavailable. Check that it is connected, or type your question.');
@@ -197,6 +238,34 @@ if (Recognition) {
   retryPermissionButton.addEventListener('click', requestMicrophoneAndListen);
 }
 
+const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+if (Recognition) {
+  const recognition = new Recognition();
+  recognition.lang = 'en-US';
+  recognition.interimResults = false;
+  recognition.addEventListener('start', () => {
+    voiceButton.setAttribute('aria-pressed', 'true');
+    voiceStatus.textContent = 'Listening… ask a yes-or-no question.';
+  });
+  recognition.addEventListener('result', (event) => {
+    questionInput.value = event.results[0][0].transcript;
+    voiceStatus.textContent = `Heard: “${questionInput.value}”`;
+    questionForm.requestSubmit();
+  });
+  recognition.addEventListener('end', () => voiceButton.setAttribute('aria-pressed', 'false'));
+  recognition.addEventListener('error', () => { voiceStatus.textContent = 'I could not hear that. Please try again or type your question.'; });
+  voiceButton.addEventListener('click', () => recognition.start());
+}
+
+  const isNegative = /alive|woman|artist/i.test(questionInput.value);
+  answer.querySelector('.answer-word').textContent = isNegative ? 'NO' : 'YES';
+  answer.querySelector('.answer-text').textContent = isNegative
+    ? 'That does not describe this mystery person.'
+    : 'You are on the right track. Keep narrowing it down.';
+  answer.hidden = false;
+  questionInput.value = '';
+});
+
 document.querySelectorAll('.suggestions button').forEach((button) => {
   button.addEventListener('click', () => {
     questionInput.value = button.textContent;
@@ -206,6 +275,7 @@ document.querySelectorAll('.suggestions button').forEach((button) => {
 
 document.querySelector('.guess-button').addEventListener('click', () => {
   questionInput.value = 'Is it ';
+  questionInput.value = 'Is it Albert Einstein?';
   questionInput.focus();
 });
 
